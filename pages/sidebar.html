@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Example</title>
+
+    <script src="https://nojram00.github.io/dist/sidebar.min.js"></script>
+    <link rel="stylesheet" href="https://nojram00.github.io/dist/sidebar.min.css">
+
+</head>
+<body>
+    <main>
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            nav{
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            #nav-container {
+                padding: 10px;
+            }
+            sidebar div{
+                padding: 10px;
+                background-color: #679436;
+                height: 100%;
+            }
+            a{
+                text-decoration: none;
+                color: #EBF2FA;
+            }
+            a:hover {
+                text-decoration: underline;
+                color: #A5BE00;
+            }
+            button {
+                max-width: 150px;
+                min-height: 25px;
+                border-radius: 5px;
+                cursor: pointer;
+                background-color: #A5BE00;
+                color: #EBF2FA;
+                border: 0;
+                box-shadow: 20px;
+            }
+            button:hover{
+                background-color: #679436;
+            }
+            .container{
+                width: 100%;
+                height: 80vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px
+            }
+        </style>
+        
+        <sidebar>
+            <div>
+                <button toggle-close>To Close, Click me</button>
+                <div id="nav-container">
+                    <nav>
+                        <a href="https://nojram-portfolio.netlify.app/">My Portfolio</a>
+                        <a href="https://github.com/nojram00?tab=repositories">My Github Repos</a>
+                    </nav>
+                </div>
+            </div>
+        </sidebar>
+        
+        <div class="container">
+            <div>
+                <button toggle-open> To Open a sidebar, Click me! </button>
+            </div>
+
+            <div>
+                <button toggle> To Toggle Open/Close a sidebar, Click me! </button>
+            </div>
+        </div>
+
+        <script>
+            document.querySelectorAll('a').forEach(el => {
+                const href = el.href;
+
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    window.open(href, '_blank');
+                })
+            })
+        </script>
+    </main>
+</body>
+</html>

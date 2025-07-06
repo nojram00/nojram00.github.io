@@ -1,9 +1,19 @@
 
 document.addEventListener('DOMContentLoaded', function(){
+    const sidebar = document.querySelector('sidebar');
     document.querySelectorAll('[toggle]').forEach(e => {
         e.addEventListener('click', function(){
-            const sidebar = document.querySelector('sidebar');
             sidebar.hasAttribute('open') ? sidebar.removeAttribute('open') : sidebar.setAttribute('open', '')
+        })
+    })
+    document.querySelectorAll('[toggle-open]').forEach(e => {
+        e.addEventListener('click', () => {
+            if(!sidebar.hasAttribute('open')) sidebar.setAttribute('open', '');
+        });
+    }); 
+    document.querySelectorAll('[toggle-close]').forEach(e => {
+        e.addEventListener('click', () => {
+            if(sidebar.hasAttribute('open')) sidebar.removeAttribute('open');
         })
     })
 })

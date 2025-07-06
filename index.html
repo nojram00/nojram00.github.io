@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nojram CDN</title>
 
+    <script src="/dist/spa.min.js"></script>
+
     <style>
         body{
             margin: 0;
@@ -36,20 +38,23 @@
             border-radius: 15px;
             box-shadow: 20px;
         }
+        a[data-href] {
+            cursor: pointer;
+        }
+        a[data-href]:hover{
+            text-decoration: underline;
+        }
     </style>
+
+
 </head>
 <body>
     <main>
-        Welcome! To use sidebar js and css just copy the code bellow:
-    
-        <code>
-            <span class="italic">
-                &lt;script src="https://nojram00.github.io/dist/sidebar.min.js"&gt;&lt;/script&gt;
-            </span>
-            <span class="italic">
-                &lt;link rel="stylesheet" href="https://nojram00.github.io/dist/sidebar.min.css"&gt;
-            </span>
-        </code>
     </main>
+    <script>
+        loadingDom = '<div>Loading Page, Please Wait...</div>';
+        root = document.querySelector('main')
+        init('/pages/home.html')
+    </script>
 </body>
 </html>
