@@ -8,12 +8,20 @@ document.addEventListener('DOMContentLoaded', function(){
     })
     document.querySelectorAll('[toggle-open]').forEach(e => {
         e.addEventListener('click', () => {
-            if(!sidebar.hasAttribute('open')) sidebar.setAttribute('open', '');
+            if(!sidebar.hasAttribute('open')) {
+                sidebar.setAttribute('open', '');
+                document.querySelectorAll('[toggle-open]').forEach(e => e.setAttribute('disabled', '')); 
+                document.querySelectorAll('[toggle-close]').forEach(e => e.removeAttribute('disabled'));
+            }
         });
     }); 
     document.querySelectorAll('[toggle-close]').forEach(e => {
         e.addEventListener('click', () => {
-            if(sidebar.hasAttribute('open')) sidebar.removeAttribute('open');
+            if(sidebar.hasAttribute('open')) {
+                sidebar.removeAttribute('open');
+                document.querySelectorAll('[toggle-open]').forEach(e => e.removeAttribute('disabled'));
+                document.querySelectorAll('[toggle-close]').forEach(e => e.setAttribute('disabled', '')); 
+            };
         })
     })
 })
