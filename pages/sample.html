@@ -17,3 +17,30 @@
 <div id="iframe-container">
     <iframe src="/pages/sidebar.html" frameborder="0"></iframe>
 </div>
+
+<!-- <span>Below is the source code from the example above.</span>
+
+<div id="iframe-container">
+    <pre id="source-display">
+        <code>
+
+        </code>
+    </pre>
+</div> -->
+
+<a data-href="/pages/home.html">Back To Home</a>
+<a data-href="/pages/docs.html">Back To Documentation</a>
+
+<!-- <script>
+fetch('/pages/sidebar.html')
+    .then(res => res.text())
+    .then(html => {
+    // Escape HTML special characters for display
+    const escaped = html
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    document.getElementById('source-display').innerHTML = `<code>${escaped}</code>`;
+    });
+</script> -->
