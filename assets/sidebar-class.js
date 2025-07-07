@@ -2,7 +2,7 @@ class HTMLSidebarElement extends HTMLElement {
   constructor() {
     super();
 
-    const shadow = this.attachShadow({ mode: "open" });
+    const shadow = this.attachShadow({ mode: "closed" });
 
     const style = document.createElement("style");
     style.textContent = `
