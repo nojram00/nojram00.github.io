@@ -1,13 +1,13 @@
 class HTMLSidebarElement extends HTMLElement {
     constructor(){
         super();
-        
-        const shadow = this.attachShadow({mode : 'open'});
+
+        this.shadow = this.attachShadow({mode : 'open'});
         const style = document.createElement('style');
 
         style.textContent = `
             :host {
-                max-width: 240px;
+                width: 240px;
                 background-color: white;
                 position: fixed;
                 top: 0;
@@ -16,21 +16,20 @@ class HTMLSidebarElement extends HTMLElement {
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
                 display: block;
                 height: 100%;
-                width: 100%;
             }
 
             :host[open] {
-                left: -100%;
+                left: -240px;
             }
 
             :host[open][partial] {
-                left: -75%;
+                left: -120px;
             }
         `
 
-        shadow.append(style);
+        this.shadow.append(style);
 
-        shadow.append(document.createElement('slot'));
+        this.shadow.append(document.createElement('slot'));
     }
 
     open() {
