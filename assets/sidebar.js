@@ -31,6 +31,6 @@ function loadSidebar(){
     document.querySelectorAll('[toggle-close]').forEach(e => {
         e.addEventListener('click', () => {
             sidebar.hasAttribute('open') && closeSideBar(sidebar);
-        })
+        });
     })
 }
