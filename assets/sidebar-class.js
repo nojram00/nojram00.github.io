@@ -37,5 +37,9 @@ class HTMLSidebarElement extends HTMLElement {
     close(){
         this.removeAttribute('open');
     }
+
+    toggle(){
+        this.hasAttribute('open') ? this.close() : this.open();
+    }
 }
 customElements.define('html-sidebar', HTMLSidebarElement);
