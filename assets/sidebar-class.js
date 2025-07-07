@@ -1,19 +1,18 @@
 class HTMLSidebarElement extends HTMLElement {
-    constructor(props = {}){
+    constructor(){
         super();
-
-        const partial = props.partial ?? false;
+        
         const shadow = this.attachShadow({mode : 'open'});
         const style = document.createElement('style');
 
         style.textContent = `
             :host {
-                max-width: ${props.defaultWidth ?? '240px'};
+                max-width: 240px;
                 background-color: white;
                 position: fixed;
                 top: 0;
                 left: 0;
-                transition: all ${props.duration ?? '1s'};
+                transition: all 1s;
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
                 display: block;
                 height: 100%;
@@ -21,7 +20,11 @@ class HTMLSidebarElement extends HTMLElement {
             }
 
             :host[open] {
-                left: ${partial ? '-50%' : '-100%'};
+                left: -100%;
+            }
+
+            :host[open][partial] {
+                left: -75%;
             }
         `
 
