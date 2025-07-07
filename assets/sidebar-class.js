@@ -3,9 +3,11 @@ class HTMLSidebarElement extends HTMLElement {
         super();
 
         this.shadow = this.attachShadow({mode : 'open'});
-        const style = document.createElement('style');
+        this.style = document.createElement('style');
+    }
 
-        style.textContent = `
+    connectedCallback(){
+        this.style.textContent = `
             :host {
                 width: 240px;
                 background-color: white;
