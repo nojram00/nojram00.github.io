@@ -14,3 +14,11 @@ sidebar {
 sidebar[open] {
     left: 0;
 }
+
+[toggle-open]:disabled {
+    cursor: not-allowed;
+}
+
+[toggle-close]:disabled{
+    cursor: not-allowed;
+}
