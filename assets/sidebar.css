@@ -1,4 +1,4 @@
-sidebar {
+sidebar, html-sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,11 +11,11 @@ sidebar {
     box-shadow: 240px;
 }
 
-sidebar[open] {
+sidebar[open], html-sidebar[open] {
     left: 0;
 }
 
-sidebar[partial][open] {
+sidebar[partial][open], html-sidebar[open] {
     left: -220px
 }
 
