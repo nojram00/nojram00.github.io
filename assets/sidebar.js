@@ -1,5 +1,9 @@
 
 document.addEventListener('DOMContentLoaded', function(){
+    loadSidebar();
+})
+
+function loadSidebar(){
     const sidebar = document.querySelector('sidebar');
     document.querySelectorAll('[toggle]').forEach(e => {
         e.addEventListener('click', function(){
@@ -24,4 +28,4 @@ document.addEventListener('DOMContentLoaded', function(){
             };
         })
     })
-})
+}
