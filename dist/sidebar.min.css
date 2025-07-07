@@ -1,1 +1,1 @@
-sidebar{position:fixed;top:0;left:0;height:100%;width:240px;left:-240px;background-color:#fff;transition:all;transition-duration:1s;box-shadow:240px}sidebar[open]{left:0}[toggle-open]:disabled{cursor:not-allowed}[toggle-close]:disabled{cursor:not-allowed}
+sidebar{position:fixed;top:0;left:0;height:100%;width:240px;left:-240px;background-color:#fff;transition:all;transition-duration:1s;box-shadow:240px}sidebar[open]{left:0}sidebar[partial][open]{left:-220px}[toggle-open]:disabled{cursor:not-allowed}[toggle-close]:disabled{cursor:not-allowed}
