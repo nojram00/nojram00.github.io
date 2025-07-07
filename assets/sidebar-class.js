@@ -2,6 +2,7 @@ class HTMLSidebarElement extends HTMLElement {
     constructor(props = {}){
         super();
 
+        props.partial == undefined ? props.partial = false : props.partial = props.partial;
         const shadow = this.attachShadow({mode : 'open'});
         const style = document.createElement('style');
 
