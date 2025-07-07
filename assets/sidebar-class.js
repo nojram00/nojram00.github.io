@@ -11,7 +11,7 @@ class HTMLSidebarElement extends HTMLElement {
                 background-color: white;
                 position: fixed;
                 top: 0;
-                left: 0;
+                left: -240px;
                 transition: all 1s;
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
                 display: block;
@@ -19,11 +19,11 @@ class HTMLSidebarElement extends HTMLElement {
             }
 
             :host[open] {
-                left: -240px;
+                left: 0px;
             }
 
             :host[open][partial] {
-                left: -120px;
+                left: -75%;
             }
         `
 
