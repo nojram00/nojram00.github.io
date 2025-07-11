@@ -10,6 +10,7 @@ function fetchHTML({
         .then(data => {
             dom.innerHTML = data;
             if(typeof onSuccess == 'function') onSuccess(dom);
+            if(typeof window.onSuccess == 'function') window.onSuccess(dom)
             document.dispatchEvent(new CustomEvent('FetchedHTML', {
                 detail : {
                     dom

@@ -55,6 +55,38 @@
         loadingDom = '<div>Loading Page, Please Wait...</div>';
         root = document.querySelector('main')
         init('/sidebar-js/pages/home.html')
+
+        window.onSuccess = function(dom){
+            // const el = document.tryGetElementById('snippet');
+            const copy_btn = dom.querySelector('#copy-btn');
+            const prompt = dom.querySelector('#copy-success');
+            const texts = dom.querySelectorAll('.italic');
+            console.log();
+
+            console.log(copy_btn)
+
+            if(copy_btn && prompt){
+                console.log(copy_btn)
+                copy_btn.addEventListener('click', function(e){
+
+                    let text = '';
+                    if(texts){
+                        texts.forEach(el => {
+                            text += el.innerText + '\n';
+                        })
+                    }
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        prompt.hasAttribute('open') ? prompt.removeAttribute('open') : prompt.setAttribute('open', '');
+    
+                        setTimeout(() => {
+                            prompt.hasAttribute('open') ? prompt.removeAttribute('open') : prompt.setAttribute('open', '');
+                        }, 5000)
+                    })
+
+                })
+            }
+        }
     </script>
 </body>
 </html>
