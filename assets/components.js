@@ -24,6 +24,67 @@ function $(query) {
             return function (callback) {
               return target.addEventListener("click", callback);
             };
+          case 'data':
+            return {
+              get : function(key){
+                return target.dataset[key];
+              },
+              set: function(key, value){
+                target.dataset[key] = value;
+              },
+              delete : function(key){
+                delete target.dataset.key;
+              }
+            };
+          case 'on':
+            return function(event_type, callback){
+              target.addEventListener(event_type, callback);
+            };
+          case 'unsub':
+            return function(event_type, callback){
+              target.removeEventListener(event_type, callback);
+            };
+          case 'fetch':
+
+            return function(url, options = {}){
+              target.dispatchEvent(new CustomEvent('fetching', {
+                detail : {
+                  url,
+                  options,
+                  element: target
+                }
+              }))
+              fetch(url, options)
+              .then(res => res.text())
+              .then(data => {
+                target.innerHTML = data;
+                target.dispatchEvent(new CustomEvent('fetched', {
+                  detail : {
+                    url,
+                    options,
+                    element: target
+                  }
+                }));
+              }).catch(error => {
+                target.dispatchEvent(new CustomEvent('fetch-error', {
+                  detail: {
+                    url,
+                    options,
+                    error,
+                    element: target
+                  }
+                }));
+              });
+            };
+          case 'html':
+            return {
+              get: function(){
+                return target.innerHTML
+              },
+              set: function(html){
+                target.innerHTML = html;
+              }
+            };
         }
       }
 
@@ -63,7 +124,67 @@ function $id(id) {
             return function (callback) {
               target.addEventListener("click", callback);
             };
-        }
+          case 'data':
+            return {
+              get : function(key){
+                return target.dataset[key];
+              },
+              set: function(key, value){
+                target.dataset[key] = value;
+              },
+              delete : function(key){
+                delete target.dataset.key;
+              }
+            };
+          case 'on':
+            return function(event_type, callback){
+              target.addEventListener(event_type, callback);
+            };
+          case 'unsub':
+            return function(event_type, callback){
+              target.removeEventListener(event_type, callback);
+            };
+          case 'fetch':
+            return function(url, options = {}){
+              target.dispatchEvent(new CustomEvent('fetching', {
+                detail : {
+                  url,
+                  options,
+                  element: target
+                }
+              }))
+              fetch(url, options)
+              .then(res => res.text())
+              .then(data => {
+                target.innerHTML = data;
+                target.dispatchEvent(new CustomEvent('fetched', {
+                  detail : {
+                    url,
+                    options,
+                    element: target
+                  }
+                }));
+              }).catch(error => {
+                target.dispatchEvent(new CustomEvent('fetch-error', {
+                  detail: {
+                    url,
+                    options,
+                    error,
+                    element: target
+                  }
+                }));
+              });
+            };
+          case 'html':
+            return {
+              get: function(){
+                return target.innerHTML
+              },
+              set: function(html){
+                target.innerHTML = html;
+              }
+            };
+          }
       }
       return el;
     },
