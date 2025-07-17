@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- <script src="/assets/carousel.js"></script> -->
+    <script src="/assets/components.js"></script>
+    <link rel="stylesheet" href="/assets/carousel.css" />
+    <!-- <link rel="stylesheet" href="/assets/carousel.css" /> -->
+
+    <style>
+      .container{
+        width: 100%;
+        height: 100%;
+      }
+      [data-anchor-box]{
+        width: 200px;
+        height: auto;
+      }
+      [data-anchor-box] > [data-toggle]{
+        anchor-name: --anchor;
+        width: fit-content;
+      }
+      [data-anchor-box] > [data-content]{
+        width: 100px;
+        height: 200px;
+        background-color: aqua;
+        position: fixed;
+        position-anchor: --anchor;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <button class="prev-btn" id="prev-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
+          />
+        </svg>
+      </button>
+      <html-carousel id="my-carousel">
+        <div class="carousel-item" data-active>
+          <img
+            src="https://www.thelist.com/img/gallery/tragic-details-about-twilight-star-taylor-lautner/intro-1728685138.jpg"
+            alt="Taylor Lautner"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://dukx4ewcvnyp6.cloudfront.net/wp-content/uploads/2024/04/1703183712-taylor-swift-g-1836506214.jpg"
+            alt="Taylor Swift"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://i.redd.it/q630lpmhcj0f1.jpeg"
+            alt="Alden Richards"
+          />
+        </div>
+      </html-carousel>
+      <button class="next-btn" id="next-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <button id="toggle-on">Click Me</button>
+    <html-sidebar>
+      <div class="container">
+        <span>Sample Nav</span>
+      </div>
+    </html-sidebar>
+
+    <div data-anchor-box>
+      <button data-toggle>Click Me again</button>
+      <div data-content>
+        Hidden Message Appeared!
+      </div>
+    </div>
+
+    <script>
+      const carousel = document.getElementById('my-carousel');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+
+      const toggleButton = document.getElementById('toggle-on');
+      nextBtn.addEventListener('click', () => window.carousel.next());
+      prevBtn.addEventListener('click', () => window.carousel.prev());
+    </script>
+
+    <script>
+
+    </script>
+  </body>
+</html>

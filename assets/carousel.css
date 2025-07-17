@@ -1,0 +1,67 @@
+body{
+    margin: 0;
+}
+
+.wrapper{
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.wrapper > button {
+    position: absolute;
+    top: 50%;
+    z-index: 20;
+    background: none;
+    border: 0;
+    color: white;
+    cursor: pointer;
+}
+
+.wrapper > button:hover{
+    color: #e1e1f1;
+}
+
+.next-btn{
+    right: 0;
+    margin-right: 10px;
+}
+
+.size-6 {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.prev-btn {
+    left: 0;
+    margin-left: 10px;
+}
+
+.carousel-container{
+    width: 100vw;
+    height: 100vh;
+    background-color: #191919;
+    position: absolute;
+}
+
+.carousel-item {
+    background-color: white;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    inset: 0;
+    padding: 0;
+    z-index: 10;
+    overflow: hidden;
+    transition: .5s all ease-in-out;
+}
+
+.carousel-item[data-active]{
+    opacity: 1;
+}
+
+.carousel-item > img {
+    object-fit: cover;
+    width: 100%;
+}

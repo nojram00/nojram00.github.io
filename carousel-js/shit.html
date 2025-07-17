@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        [data-anchor-box]{
+            position: relative;
+            width: 200px;
+            height: auto;
+        }
+        [data-toggle]{
+            anchor-name: --anchor;
+            width: fit-content;
+        }
+        [data-content]{
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            width: 400px;
+            height: 200px;
+            background-color: aqua;
+            position: absolute;
+            position-anchor: --anchor;
+
+            transform: scale(0);
+            transform-origin: left top;
+            transition: all .5s ease-in-out;
+        }
+        [data-content][open]{
+            transform: scale(1)
+        }
+    </style>
+</head>
+<body>
+    <div data-anchor-box>
+        <button data-toggle>Click Me again</button>
+        <div data-content>
+            Hidden Message Appeared!
+        </div>
+    </div>
+
+    <script>
+        
+        function find(identifier){
+            const c = document.querySelector('[data-anchor-box]')?.children
+            return Array.from(c).filter(child => child.dataset[identifier] != undefined)[0]
+        }
+        const button = find('toggle');
+        const content = find('content');
+
+        button.addEventListener('click', function(){
+            content.toggleAttribute('open');
+        })
+
+        console.log(button);
+        console.log(content);
+        
+    </script>
+</body>
+</html>

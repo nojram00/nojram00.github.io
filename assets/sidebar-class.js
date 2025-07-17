@@ -1,4 +1,5 @@
-class HTMLSidebarElement extends HTMLElement {
+class MySidebar extends HTMLElement {
+  static _instance = null;
   constructor() {
     super();
 
@@ -29,6 +30,13 @@ class HTMLSidebarElement extends HTMLElement {
 
     shadow.appendChild(style);
     shadow.appendChild(document.createElement("slot"));
+
+    if(MySidebar._instance) throw new Error("Only one sidebar allowed");
+    MySidebar._instance = this;
+  }
+
+  static get instance(){
+    return MySidebar._instance;
   }
 
   open() {
@@ -40,7 +48,8 @@ class HTMLSidebarElement extends HTMLElement {
   }
 
   toggle() {
-    this.hasAttribute("open") ? this.close() : this.open();
+    this.toggleAttribute('open');
   }
 }
-customElements.define("html-sidebar", HTMLSidebarElement);
+
+customElements.define("html-sidebar", MySidebar);
