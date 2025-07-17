@@ -1,4 +1,74 @@
-window.carousels = {}
+window.carousels = {};
+
+var prod = true;
+
+document.addEventListener("DOMContentLoaded", function () {
+  (function loadCss() {
+    const cssLink = document.createElement("link");
+    cssLink.type = "text/css";
+    cssLink.rel = "stylesheet";
+    cssLink.href = prod ? "/dist/components.min.css" : "/assets/components.css";
+
+    document.head.appendChild(cssLink);
+  })();
+});
+
+// selectors
+function $(query) {
+  const el = document.querySelector(query);
+  return new Proxy(el, {
+    get(target, props, receiver) {
+      if (props !== undefined) {
+        switch (props) {
+          case "click":
+            return function (callback) {
+              return target.addEventListener("click", callback);
+            };
+        }
+      }
+
+      return el;
+    },
+  });
+}
+
+function $$(query) {
+  const el =  document.querySelectorAll(query);
+  return new Proxy(el, {
+    get(target, props, receiver) {
+      if (props !== undefined) {
+        switch (props) {
+          case "click":
+            return function (callback) {
+              target.forEach(child => child.addEventListener('click', callback));
+            }
+        }
+      }
+      return el;
+    }
+  })
+}
+
+function $c(query) {
+  return document.createElement(query);
+}
+
+function $id(id) {
+  const el = document.getElementById(id);
+  return new Proxy(el, {
+    get(target, props, receiver) {
+      if (props !== undefined) {
+        switch (props) {
+          case "click":
+            return function (callback) {
+              target.addEventListener("click", callback);
+            };
+        }
+      }
+      return el;
+    },
+  });
+}
 
 class Carousel extends HTMLElement {
   constructor() {
@@ -33,31 +103,33 @@ class Carousel extends HTMLElement {
 
     this.shadow = this.attachShadow({ mode: "open" });
     this.slotElement = document.createElement("slot");
-
   }
-  
+
   connectedCallback() {
     this.shadow.appendChild(this.styleEl);
     this.shadow.appendChild(this.slotElement);
 
-    if(!window.carousel) window.carousel = this;
-    else if(window.carousel && this.dataset.forceOverwrite){
+    if (!window.carousel) window.carousel = this;
+    else if (window.carousel && this.dataset.forceOverwrite) {
       window.carousel = this;
-    }
-    else{
-      console.warn("More than 1 carousel element has been detected. The window.carousel has been to assigned to the first carousel element detected. \nTo assign this element make sure to add 'data-force-overwrite' attribute to this element.\nOr assign via adding a 'data-label' attribute and access it via window.carousels.");
+    } else {
+      console.warn(
+        "More than 1 carousel element has been detected. The window.carousel has been to assigned to the first carousel element detected. \nTo assign this element make sure to add 'data-force-overwrite' attribute to this element.\nOr assign via adding a 'data-label' attribute and access it via window.carousels."
+      );
     }
 
-    if(this.dataset.label){
-      if (this.dataset['force-overwrite']) {
-        console.error("Cannot assign a label to a carousel element when 'data-force-overwrite' is present. Please remove 'data-force-overwrite' to assign a label.");
+    if (this.dataset.label) {
+      if (this.dataset["force-overwrite"]) {
+        console.error(
+          "Cannot assign a label to a carousel element when 'data-force-overwrite' is present. Please remove 'data-force-overwrite' to assign a label."
+        );
         return;
       }
       window.carousels[this.dataset.label] = this;
     }
   }
 
-  disconnectedCallback(){
+  disconnectedCallback() {
     window.carousel = null;
   }
 
@@ -65,11 +137,11 @@ class Carousel extends HTMLElement {
     return window.carousel;
   }
 
-  static getInstance(instanceLabel){
+  static getInstance(instanceLabel) {
     return window.carousels[instanceLabel];
   }
 
-  static get instances(){
+  static get instances() {
     return window.carousels;
   }
 
@@ -103,35 +175,35 @@ class Sidebar extends HTMLElement {
   constructor() {
     super();
 
-    const shadow = this.attachShadow({ mode: "closed" });
+    // const shadow = this.attachShadow({ mode: "closed" });
 
-    const style = document.createElement("style");
-    style.textContent = `
-            :host {
-              position: fixed;
-              top: 0;
-              left: -240px;
-              width: 240px;
-              height: 100%;
-              background: white;
-              transition: left 0.3s ease;
-              box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-              display: block;
-            }
-  
-            :host([open]), :host([partial][open]) {
-              left: 0;
-            }
-  
-            :host([partial]){
-              left: -160px;
-            }
-          `;
+    // const style = document.createElement("style");
+    // style.textContent = `
+    //         :host {
+    //           position: fixed;
+    //           top: 0;
+    //           left: -240px;
+    //           width: 240px;
+    //           height: 100%;
+    //           background: white;
+    //           transition: left 0.3s ease;
+    //           box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    //           display: block;
+    //         }
 
-    shadow.appendChild(style);
-    shadow.appendChild(document.createElement("slot"));
+    //         :host([open]), :host([partial][open]) {
+    //           left: 0;
+    //         }
 
-    if(!window.sidebar) window.sidebar = this;
+    //         :host([partial]){
+    //           left: -160px;
+    //         }
+    //       `;
+
+    // shadow.appendChild(style);
+    // shadow.appendChild(document.createElement("slot"));
+
+    if (!window.sidebar) window.sidebar = this;
   }
 
   static get instance() {
@@ -152,51 +224,56 @@ class Sidebar extends HTMLElement {
 }
 
 class Preloader extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
-    if(!window.preloader) {
-      window.preloader = this
-    };
+    if (!window.preloader) {
+      window.preloader = this;
+    }
   }
 
-  disconnectedCallback(){
+  disconnectedCallback() {
     window.preloader = null;
   }
 
-  setLoadingPage(html){
+  setLoadingPage(html) {
     this.loadingPage = html;
   }
 
-  setFallbackPage(html){
+  setFallbackPage(html) {
     this.fallbackPage = html;
   }
 
-  load(url, options = {}){
-    this.innerHTML = this.loadingPage ?? '';
-    fetch(url, options).then(res => res.text())
-    .then(html => {
+  load(url, options = {}) {
+    this.innerHTML = this.loadingPage ?? "";
+    fetch(url, options)
+      .then((res) => res.text())
+      .then((html) => {
         this.innerHTML = html;
-    })
-    .catch((error) => {
-      console.error(error);
-      this.innerHTML = this.fallbackPage ?? '';
-    });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.innerHTML = this.fallbackPage ?? "";
+      });
   }
 }
 
 class PopOver extends HTMLElement {
-  constructor(){
+  constructor() {
     super();
+
+    // this.direction = this.dataset['direction'] == undefined ? 'left' : this.dataset['direction'];
+    this.direction = this.dataset["direction"] ?? "left";
+
     this.styleEl = document.createElement("style");
     this.styleEl.innerHTML = `
         :host{
             position: relative;
-            min-width: 240px !important;
+            min-width: 10px !important;
             height: auto;
         }
         ::slotted([data-toggle]){
             anchor-name: --anchor;
-            width: fit-content;
+            width: 100%;
         }
         ::slotted([data-content]){
             margin-top: 10px;
@@ -205,9 +282,10 @@ class PopOver extends HTMLElement {
             min-width: 80px;
             min-height: 200px;
             background-color: aqua;
-            position: absolute;
+            position: fixed;
             position-anchor: --anchor;
             box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+            top: calc(anchor(bottom) + 5px);
 
             transform: scale(0);
             transform-origin: left top;
@@ -216,29 +294,74 @@ class PopOver extends HTMLElement {
         ::slotted([data-content][open]){
             transform: scale(1);
         }
-    `
+    `;
 
-    this.shadow = this.attachShadow({ mode: 'open' });
+    this.shadow = this.attachShadow({ mode: "open" });
   }
 
-  connectedCallback(){
+  connectedCallback() {
     this.shadow.appendChild(this.styleEl);
     this.shadow.appendChild(document.createElement("slot"));
 
-    requestAnimationFrame(() => this.initContent());
-  }
+    requestAnimationFrame(() => {
+      const button = this._find("toggle");
+      const content = this._find("content");
 
-  initContent(){
-    const button = this._find('toggle');
-    const content = this._find('content');
+      const rect = button.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
 
-    button.addEventListener('click', () => {
-      content.toggleAttribute('open');
+      const willOverflow = rect.left + contentRect.width + 10 > viewportWidth;
+
+      if (willOverflow) {
+        content.style.left = `calc(anchor(right) - ${contentRect.width + 5}px)`;
+        content.style.transformOrigin = "right top";
+      } else {
+        content.style.left = `calc(anchor(left) + 5px)`;
+        content.style.transformOrigin = "left top";
+      }
+
+      button.addEventListener("click", () => {
+        content.toggleAttribute("open");
+      });
     });
   }
 
-  _find(identifier){
-    return Array.from(this.children).filter(child => child.dataset[identifier] != undefined)[0]
+  _find(identifier) {
+    return Array.from(this.children).filter(
+      (child) => child.dataset[identifier] != undefined
+    )[0];
+  }
+}
+
+class Modal extends HTMLDialogElement {
+  constructor() {
+    super();
+
+    this._onTransitionEnd = this._onTransitionEnd.bind(this);
+  }
+
+  openModal() {
+    this.showModal();
+
+    requestAnimationFrame(() => (this.content.dataset["open"] = ""));
+  }
+
+  closeModal() {
+    delete this.content.dataset["open"];
+
+    this.content.addEventListener("transitionend", this._onTransitionEnd);
+  }
+
+  _onTransitionEnd(evt) {
+    console.log(evt.propertyName);
+    if (evt.propertyName === "scale") {
+      this.close();
+      this.content.removeEventListener("transitionend", this._onTransitionEnd);
+    }
+  }
+  get content() {
+    return this.querySelector("[data-content]");
   }
 }
 
@@ -249,3 +372,5 @@ customElements.define("html-carousel", Carousel);
 customElements.define("html-preloader", Preloader);
 
 customElements.define("html-popover", PopOver);
+
+customElements.define("html-modal", Modal, { extends: "dialog" });
