@@ -195,40 +195,40 @@ class Carousel extends HTMLElement {
   constructor() {
     super();
 
-    this.styleEl = document.createElement("style");
-    this.styleEl.innerHTML = `
-            :host{
-                width: 100%;
-                height: 100% ;
-                background-color: #191919;
-                position: absolute !important;
-            }
+    // this.styleEl = document.createElement("style");
+    // this.styleEl.innerHTML = `
+    //         :host{
+    //             width: 100%;
+    //             height: 100% ;
+    //             background-color: #191919;
+    //             position: absolute !important;
+    //         }
 
-            ::slotted(*) {
-                background-color: white;
-                position: absolute !important;
-                height: 100%;
-                width: 100%;
-                opacity: 0;
-                inset: 0;
-                padding: 0;
-                z-index: 10;
-                overflow: hidden;
-                transition: .5s all ease-in-out;
-            }
+    //         ::slotted(*) {
+    //             background-color: white;
+    //             position: absolute !important;
+    //             height: 100%;
+    //             width: 100%;
+    //             opacity: 0;
+    //             inset: 0;
+    //             padding: 0;
+    //             z-index: 10;
+    //             overflow: hidden;
+    //             transition: .5s all ease-in-out;
+    //         }
 
-            ::slotted([data-active]) {
-                opacity: 1;
-            }
-        `;
+    //         ::slotted([data-active]) {
+    //             opacity: 1;
+    //         }
+    //     `;
 
-    this.shadow = this.attachShadow({ mode: "open" });
-    this.slotElement = document.createElement("slot");
+    // this.shadow = this.attachShadow({ mode: "open" });
+    // this.slotElement = document.createElement("slot");
   }
 
   connectedCallback() {
-    this.shadow.appendChild(this.styleEl);
-    this.shadow.appendChild(this.slotElement);
+    // this.shadow.appendChild(this.styleEl);
+    // this.shadow.appendChild(this.slotElement);
 
     if (!window.carousel) window.carousel = this;
     else if (window.carousel && this.dataset.forceOverwrite) {
@@ -295,35 +295,6 @@ class Sidebar extends HTMLElement {
   static _instance = null;
   constructor() {
     super();
-
-    // const shadow = this.attachShadow({ mode: "closed" });
-
-    // const style = document.createElement("style");
-    // style.textContent = `
-    //         :host {
-    //           position: fixed;
-    //           top: 0;
-    //           left: -240px;
-    //           width: 240px;
-    //           height: 100%;
-    //           background: white;
-    //           transition: left 0.3s ease;
-    //           box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    //           display: block;
-    //         }
-
-    //         :host([open]), :host([partial][open]) {
-    //           left: 0;
-    //         }
-
-    //         :host([partial]){
-    //           left: -160px;
-    //         }
-    //       `;
-
-    // shadow.appendChild(style);
-    // shadow.appendChild(document.createElement("slot"));
-
     if (!window.sidebar) window.sidebar = this;
   }
 

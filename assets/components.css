@@ -5,6 +5,10 @@ html-carousel {
   position: absolute !important;
 }
 
+*:has(> html-carousel){
+    position: relative;
+}
+
 html-carousel > * {
   background-color: white;
   position: absolute !important;
