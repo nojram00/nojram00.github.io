@@ -69,7 +69,7 @@ class Carousel extends HTMLElement {
     return window.carousels[instanceLabel];
   }
 
-  static getInstances(){
+  static get instances(){
     return window.carousels;
   }
 
