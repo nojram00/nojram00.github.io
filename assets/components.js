@@ -110,8 +110,14 @@ function $$(query) {
   })
 }
 
-function $c(query) {
-  return document.createElement(query);
+function $c(query, props) {
+  const el = document.createElement(query);
+  if (props !== undefined) {
+    for (const [key, value] of Object.entries(props)) {
+      el.setAttribute(key, value);
+    }
+  }
+  return el;
 }
 
 function $id(id) {
@@ -252,6 +258,7 @@ class Carousel extends HTMLElement {
 
   disconnectedCallback() {
     window.carousel = null;
+    window.carousels[this.dataset.label] = null;
   }
 
   static get instance() {
