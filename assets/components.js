@@ -200,41 +200,9 @@ function $id(id) {
 class Carousel extends HTMLElement {
   constructor() {
     super();
-
-    // this.styleEl = document.createElement("style");
-    // this.styleEl.innerHTML = `
-    //         :host{
-    //             width: 100%;
-    //             height: 100% ;
-    //             background-color: #191919;
-    //             position: absolute !important;
-    //         }
-
-    //         ::slotted(*) {
-    //             background-color: white;
-    //             position: absolute !important;
-    //             height: 100%;
-    //             width: 100%;
-    //             opacity: 0;
-    //             inset: 0;
-    //             padding: 0;
-    //             z-index: 10;
-    //             overflow: hidden;
-    //             transition: .5s all ease-in-out;
-    //         }
-
-    //         ::slotted([data-active]) {
-    //             opacity: 1;
-    //         }
-    //     `;
-
-    // this.shadow = this.attachShadow({ mode: "open" });
-    // this.slotElement = document.createElement("slot");
   }
 
   connectedCallback() {
-    // this.shadow.appendChild(this.styleEl);
-    // this.shadow.appendChild(this.slotElement);
 
     if (!window.carousel) window.carousel = this;
     else if (window.carousel && this.dataset.forceOverwrite) {
@@ -360,76 +328,43 @@ class PopOver extends HTMLElement {
   constructor() {
     super();
 
-    // this.direction = this.dataset['direction'] == undefined ? 'left' : this.dataset['direction'];
-    this.direction = this.dataset["direction"] ?? "left";
+    this.shadow = this.attachShadow({ mode: 'open' });
 
-    this.styleEl = document.createElement("style");
-    this.styleEl.innerHTML = `
-        :host{
-            position: relative;
-            min-width: 10px !important;
-            height: auto;
+    this.shadow.innerHTML = `
+
+      <style>
+        button {
+          border: 0;
+          background: none;
+          cursor: pointer;
+
+          anchor-name: --popoverBtn;
         }
-        ::slotted([data-toggle]){
-            anchor-name: --anchor;
-            width: 100%;
-        }
-        ::slotted([data-content]){
-            margin-top: 10px;
-            padding: 5px;
-            border-radius: 5px;
-            min-width: 80px;
-            min-height: 200px;
-            background-color: aqua;
+
+        #popover-content {
+          position-anchor: --popoverBtn;
             position: fixed;
-            position-anchor: --anchor;
-            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-            top: calc(anchor(bottom) + 5px);
+            top: anchor(bottom);
+            left: anchor(left);
+            margin: 10px 5px;
 
-            transform: scale(0);
-            transform-origin: left top;
-            transition: transform .5s ease-in-out;
+            border: 0;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, .25);
+            border-radius: 5px;
+            min-height: 10rem;
+            min-width: 15rem;
         }
-        ::slotted([data-content][open]){
-            transform: scale(1);
-        }
-    `;
-
-    this.shadow = this.attachShadow({ mode: "open" });
-  }
-
-  connectedCallback() {
-    this.shadow.appendChild(this.styleEl);
-    this.shadow.appendChild(document.createElement("slot"));
-
-    requestAnimationFrame(() => {
-      const button = this._find("toggle");
-      const content = this._find("content");
-
-      const rect = button.getBoundingClientRect();
-      const contentRect = content.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-
-      const willOverflow = rect.left + contentRect.width + 10 > viewportWidth;
-
-      if (willOverflow) {
-        content.style.left = `calc(anchor(right) - ${contentRect.width + 5}px)`;
-        content.style.transformOrigin = "right top";
-      } else {
-        content.style.left = `calc(anchor(left) + 5px)`;
-        content.style.transformOrigin = "left top";
-      }
-
-      button.addEventListener("click", () => {
-        content.toggleAttribute("open");
-      });
-    });
-  }
-
-  _find(identifier) {
-    return Array.from(this.children).filter(
-      (child) => child.dataset[identifier] != undefined
-    )[0];
+      </style>
+    
+      <div>
+        <button popovertarget="popover-content">
+          <slot name="button"></slot>
+        </button>
+        <div popover id="popover-content">
+          <slot name="popover-content"></slot>
+        </div>
+      </div>
+    `
   }
 }
 
@@ -464,6 +399,127 @@ class Modal extends HTMLDialogElement {
   }
 }
 
+class Copyright extends HTMLElement {
+  constructor(){
+    super();
+
+    const date = new Date();
+    this.year = date.getFullYear();
+  }
+
+  connectedCallback(){
+    this.innerHTML = `
+      <span>&copy;${this.year}</span>
+    `;
+  }
+}
+
+class ScriptLetter extends HTMLElement {
+  constructor(){
+    super();
+  }
+
+  get words(){
+    this.getAttribute('data-words');
+  }
+
+  connectedCallback(){
+    console.log(this.words)
+    if(this.dataset.letter){
+      this.innerHTML = `&${this.dataset.letter}scr;`;
+    }
+
+    if(this.words != undefined){
+      const chars = (this.words).split('')
+      const words = chars.map(c => `&${c}scr;`).join('');
+
+      console.log(words);
+    }
+  }
+}
+
+// Stateful Components:
+
+class StatefulView extends HTMLElement {
+
+  #_states = {};
+  get state(){
+      return this.#_states;
+  }
+
+  set state(value){
+      Object.assign(this.#_states, value);
+      if(typeof this.render == 'function') this.shadowRoot.innerHTML = this.render(value);
+  }
+
+  constructor(){
+      super();
+
+      this.attachShadow({ mode: 'open' });
+
+      this.shadowRoot.appendChild(document.createElement('style'));
+
+      Object.defineProperties(this, {
+        "styleSheet" : {
+          value: (styles) => {
+            this.shadowRoot.querySelector('style').innerHTML = styles;
+          },
+          configurable: false,
+          writable: false,
+          enumerable: false
+        },
+        "on" : {
+          value: (event_type, callback) => {
+            this.shadowRoot.addEventListener(event_type, callback);
+          },
+          configurable: false,
+          writable: false,
+          enumerable: false
+        },
+        "setState" : {
+          value: (key, value) => {
+            this.state = { [key] : value };
+          },
+          configurable: false,
+          writable: false,
+          enumerable: false
+        }
+      });
+
+      if(typeof this.render == 'function') this.shadowRoot.innerHTML = this.render(this.state);
+  }
+
+  render(state){};
+}
+
+class Counter extends StatefulView {
+  constructor(){
+    super();
+
+    this.state = { count: 0 };
+
+    this.on('click', e => {
+      if(e.target.id == 'increment'){
+        this.state = { count: this.state.count + 1 };
+        console.log("Increment");
+      }
+      else if(e.target.id == 'decrement'){
+        this.state = { count: this.state.count - 1 };
+        console.log("Decrement");
+      };
+    });
+  }
+
+  render(state){
+    console.log(state);
+    return `
+      <button id="decrement">-</button>${state.count}<button id="increment">+</button>
+    `;
+  }
+}
+
+customElements.define('html-counter', Counter);
+
 customElements.define("html-sidebar", Sidebar);
 
 customElements.define("html-carousel", Carousel);
@@ -473,3 +529,7 @@ customElements.define("html-preloader", Preloader);
 customElements.define("html-popover", PopOver);
 
 customElements.define("html-modal", Modal, { extends: "dialog" });
+
+customElements.define("html-copyright", Copyright);
+
+customElements.define("html-scr", ScriptLetter);
