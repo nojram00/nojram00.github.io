@@ -443,13 +443,14 @@ class ScriptLetter extends HTMLElement {
 class StatefulView extends HTMLElement {
 
   #_states = {};
+
   get state(){
       return this.#_states;
   }
 
-  set state(value){
-      Object.assign(this.#_states, value);
-      if(typeof this.render == 'function') this.shadowRoot.innerHTML = this.render(value);
+  set state(state_value){
+      Object.assign(this.#_states, state_value);
+      if(typeof this.render == 'function') this.shadowRoot.innerHTML = this.render(state_value);
   }
 
   constructor(){
@@ -478,7 +479,9 @@ class StatefulView extends HTMLElement {
         },
         "setState" : {
           value: (key, value) => {
-            this.state = { [key] : value };
+            const prev = this.#_states[key];
+            this.#_states[key] = typeof value == 'function' ? value(prev) : value;
+            if(typeof this.render == 'function') this.shadowRoot.innerHTML = this.render(this.#_states);
           },
           configurable: false,
           writable: false,
