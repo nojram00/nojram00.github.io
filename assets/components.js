@@ -85,10 +85,13 @@ function $(query) {
                 target.innerHTML = html;
               }
             };
+          default:
+            return target[props];
         }
       }
 
-      return el;
+      return target;
+      
     },
   });
 }
@@ -103,9 +106,11 @@ function $$(query) {
             return function (callback) {
               target.forEach(child => child.addEventListener('click', callback));
             }
+          default:
+            return target[props];
         }
       }
-      return el;
+      return target;
     }
   })
 }
@@ -190,9 +195,11 @@ function $id(id) {
                 target.innerHTML = html;
               }
             };
+          default:
+            return target[props];
           }
       }
-      return el;
+      return target;
     },
   });
 }
