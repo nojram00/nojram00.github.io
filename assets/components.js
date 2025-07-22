@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cssLink = document.createElement("link");
     cssLink.type = "text/css";
     cssLink.rel = "stylesheet";
-    cssLink.href = prod ? "/dist/components.min.css" : "/assets/components.css";
+    cssLink.href = prod ? "https://nojram00.github.io/dist/components.min.css" : "/assets/components.css";
 
     document.head.appendChild(cssLink);
   })();
