@@ -331,48 +331,63 @@ class Preloader extends HTMLElement {
   }
 }
 
-class PopOver extends HTMLElement {
-  constructor() {
+class Popover extends HTMLElement {
+  constructor(){
     super();
 
-    this.shadow = this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: 'open' });
 
-    this.shadow.innerHTML = `
+    const uniqueId = `popover-${Math.random().toString(36).substring(2, 9)}`;
+    const anchorName = `--${uniqueId}-btn`;
+    const popoverId = `${uniqueId}-content`;
 
-      <style>
-        button {
-          border: 0;
-          background: none;
-          cursor: pointer;
+    this.shadowRoot.innerHTML = `
+        <style>
+            .popup-btn {
+                border: 0;
+                background: none;
+                cursor: pointer;
 
-          anchor-name: --popoverBtn;
-        }
+                anchor-name: ${anchorName};
+            }
 
-        #popover-content {
-          position-anchor: --popoverBtn;
-            position: fixed;
-            top: anchor(bottom);
-            left: anchor(left);
-            margin: 10px 5px;
+            #${popoverId} {
+                position: fixed;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                background: #fff;
+                box-shadow: 0 0 10px rgba(0,0,0,0.5);
 
-            border: 0;
-            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, .25);
-            border-radius: 5px;
-            min-height: 10rem;
-            min-width: 15rem;
-        }
-      </style>
-    
-      <div>
-        <button popovertarget="popover-content">
-          <slot name="button"></slot>
-        </button>
-        <div popover id="popover-content">
-          <slot name="popover-content"></slot>
+                min-height: 10rem;
+                min-width: 10rem;
+
+                position-anchor: ${anchorName};
+                top: anchor(bottom);
+                left: anchor(left);
+                margin: 10px 5px;
+                
+                & > div {
+                    padding: 10px;
+                    width: inherit;
+                    height: 100%
+                }
+
+            }
+        </style>
+
+        <div>
+            <button class="popup-btn" popovertarget="${popoverId}">
+                <slot name="button"></slot>
+            </button>
+
+            <dialog popover id="${popoverId}">
+                <slot name="content"></slot>
+            </dialog>
         </div>
-      </div>
     `
-  }
+
+}
 }
 
 class Modal extends HTMLDialogElement {
@@ -528,6 +543,8 @@ class Counter extends StatefulView {
   }
 }
 
+window.StatefulView = StatefulView;
+
 customElements.define('html-counter', Counter);
 
 customElements.define("html-sidebar", Sidebar);
@@ -536,7 +553,7 @@ customElements.define("html-carousel", Carousel);
 
 customElements.define("html-preloader", Preloader);
 
-customElements.define("html-popover", PopOver);
+customElements.define("html-popover", Popover);
 
 customElements.define("html-modal", Modal, { extends: "dialog" });
 
