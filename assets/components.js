@@ -462,7 +462,7 @@ class ScriptLetter extends HTMLElement {
 
 // Stateful Components:
 
-class StatefulView extends HTMLElement {
+class StatefulElement extends HTMLElement {
 
   #_states = {};
 
@@ -517,33 +517,7 @@ class StatefulView extends HTMLElement {
   render(state){};
 }
 
-class Counter extends StatefulView {
-  constructor(){
-    super();
-
-    this.state = { count: 0 };
-
-    this.on('click', e => {
-      if(e.target.id == 'increment'){
-        this.state = { count: this.state.count + 1 };
-        console.log("Increment");
-      }
-      else if(e.target.id == 'decrement'){
-        this.state = { count: this.state.count - 1 };
-        console.log("Decrement");
-      };
-    });
-  }
-
-  render(state){
-    console.log(state);
-    return `
-      <button id="decrement">-</button>${state.count}<button id="increment">+</button>
-    `;
-  }
-}
-
-window.StatefulView = StatefulView;
+window.StatefulElement = StatefulElement;
 
 customElements.define('html-counter', Counter);
 
