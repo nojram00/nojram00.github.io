@@ -519,8 +519,6 @@ class StatefulElement extends HTMLElement {
 
 window.StatefulElement = StatefulElement;
 
-customElements.define('html-counter', Counter);
-
 customElements.define("html-sidebar", Sidebar);
 
 customElements.define("html-carousel", Carousel);
