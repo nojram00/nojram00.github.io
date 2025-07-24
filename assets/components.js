@@ -232,8 +232,12 @@ class Carousel extends HTMLElement {
   }
 
   disconnectedCallback() {
-    window.carousel = null;
-    window.carousels[this.dataset.label] = null;
+    if (window.carousel === this) {
+      window.carousel = null;
+    }
+    if (this.dataset.label) {
+      window.carousels[this.dataset.label] = null;
+    }
   }
 
   static get instance() {
@@ -274,7 +278,7 @@ class Carousel extends HTMLElement {
 }
 
 class Sidebar extends HTMLElement {
-  static _instance = null;
+
   constructor() {
     super();
     if (!window.sidebar) window.sidebar = this;
@@ -337,9 +341,9 @@ class Popover extends HTMLElement {
 
     this.attachShadow({ mode: 'open' });
 
-    const uniqueId = `popover-${Math.random().toString(36).substring(2, 9)}`;
-    const anchorName = `--${uniqueId}-btn`;
-    const popoverId = `${uniqueId}-content`;
+    this.uniqueId = `popover-${Math.random().toString(36).substring(2, 9)}`;
+    const anchorName = `--${this.uniqueId}-btn`;
+    const popoverId = `${this.uniqueId}-content`;
 
     this.shadowRoot.innerHTML = `
         <style>
@@ -352,11 +356,9 @@ class Popover extends HTMLElement {
             }
 
             #${popoverId} {
-                position: fixed;
+                position: relative;
                 border: 1px solid #ccc;
                 border-radius: 5px;
-                padding: 10px;
-                background: #fff;
                 box-shadow: 0 0 10px rgba(0,0,0,0.5);
 
                 min-height: 10rem;
@@ -366,6 +368,10 @@ class Popover extends HTMLElement {
                 top: anchor(bottom);
                 left: anchor(left);
                 margin: 10px 5px;
+
+                &::backdrop {
+                  background-color: rgba(0,0,0, 0.7);
+                }
                 
                 & > div {
                     padding: 10px;
@@ -386,8 +392,19 @@ class Popover extends HTMLElement {
             </dialog>
         </div>
     `
+  }
 
-}
+  get popoverContent(){
+    return this.shadowRoot.getElementById(`${this.uniqueId}-content`);
+  }
+
+  connectedCallback(){
+    const backgroundColor = this.getAttribute('background-color') ?? "#fff";
+
+    if(backgroundColor){
+      this.popoverContent.style.backgroundColor = backgroundColor;
+    }
+  }
 }
 
 class Modal extends HTMLDialogElement {
@@ -442,11 +459,10 @@ class ScriptLetter extends HTMLElement {
   }
 
   get words(){
-    this.getAttribute('data-words');
+    return this.getAttribute('data-words');
   }
 
   connectedCallback(){
-    console.log(this.words)
     if(this.dataset.letter){
       this.innerHTML = `&${this.dataset.letter}scr;`;
     }
@@ -454,13 +470,10 @@ class ScriptLetter extends HTMLElement {
     if(this.words != undefined){
       const chars = (this.words).split('')
       const words = chars.map(c => `&${c}scr;`).join('');
-
-      console.log(words);
+      this.innerHTML = words;
     }
   }
 }
-
-// Stateful Components:
 
 class StatefulElement extends HTMLElement {
 
@@ -517,18 +530,47 @@ class StatefulElement extends HTMLElement {
   render(state){};
 }
 
+class BreadCrumb extends HTMLElement {
+  constructor(){
+    super();
+
+    this.attachShadow({ mode: 'open' });
+
+    this.shadowRoot.innerHTML = `
+      <style>
+        .breadcrumb-wrapper{
+          list-style-type: none;
+          display: flex;
+          gap: 10px;
+        }
+      </style>
+
+      <ul class="breadcrumb-wrapper">
+        <slot></slot>
+      </ul>
+    `
+  }
+
+  connectedCallback(){
+
+    requestAnimationFrame(() => {
+      const childrenArray = Array.from(this.children)
+      childrenArray.forEach((child) => {
+        
+      })
+    })
+  }
+}
+
 window.StatefulElement = StatefulElement;
 
 customElements.define("html-sidebar", Sidebar);
-
 customElements.define("html-carousel", Carousel);
-
 customElements.define("html-preloader", Preloader);
-
 customElements.define("html-popover", Popover);
-
 customElements.define("html-modal", Modal, { extends: "dialog" });
-
 customElements.define("html-copyright", Copyright);
-
 customElements.define("html-scr", ScriptLetter);
+customElements.define("html-breadcrumb", BreadCrumb);
+
+customElements.define("html-breadcrumb", BreadCrumb);

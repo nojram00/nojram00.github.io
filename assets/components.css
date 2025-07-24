@@ -74,3 +74,24 @@ dialog[is="html-modal"]::backdrop {
 dialog[is="html-modal"] > [data-content][data-open] {
   scale: 1;
 }
+
+html-breadcrumb > li {
+  cursor: pointer;
+  position: relative;
+
+  &:hover{
+    text-decoration: underline;
+    color: rgba(200, 200, 200, .90);
+  }
+
+  & > a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:not(:last-child)::after{
+      content: url('/svg/right.svg');
+      margin-left: 10px;
+  }   
+}
