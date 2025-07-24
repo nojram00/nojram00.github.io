@@ -550,6 +550,31 @@ class BreadCrumb extends HTMLElement {
       </ul>
     `
   }
+
+  connectedCallback(){
+    // Here, li elements inside this widget should be used as navigation if data-href has been applied:
+    requestAnimationFrame(() => {
+      // Filter only li elements from children
+      const liElements = Array.from(this.children).filter(child => child.tagName.toLowerCase() === 'li');
+      
+      liElements.forEach(li => {
+        if(li.hasAttribute('data-href')){
+          li.addEventListener('click', (e) => {
+            const href = li.getAttribute('data-href');
+            e.preventDefault();
+            if(href){
+              if(li.hasAttribute('data-new-window')){
+                window.open(href);
+              }
+              else{
+                window.location.href = href;
+              }
+            }
+          })
+        }
+      });
+    })
+  }
 }
 
 window.StatefulElement = StatefulElement;
