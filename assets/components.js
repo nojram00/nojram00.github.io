@@ -563,8 +563,8 @@ class BreadCrumb extends HTMLElement {
             const href = li.getAttribute('data-href');
             e.preventDefault();
             if(href){
-              if(li.hasAttribute('data-new-window')){
-                window.open(href);
+              if(li.hasAttribute('data-new-tab')){
+                window.open(href, '_blank');
               }
               else{
                 window.location.href = href;
