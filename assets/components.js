@@ -634,8 +634,6 @@ class BreadCrumb extends HTMLElement {
       return `<li>${name}</li>`;
     }).join('');
 
-    console.log(items)
-
     this.innerHTML = items;
   }
 
