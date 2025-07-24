@@ -404,6 +404,8 @@ class Popover extends HTMLElement {
     if(backgroundColor){
       this.popoverContent.style.backgroundColor = backgroundColor;
     }
+
+    typeof window.popoverLoaded == 'function' && window.popoverLoaded(this);
   }
 }
 
@@ -552,6 +554,11 @@ class BreadCrumb extends HTMLElement {
   }
 
   connectedCallback(){
+    this.renderFunctionalities();
+    if(typeof window.breadCrumbLoaded == 'function') window.breadCrumbLoaded(this);
+  }
+
+  renderFunctionalities(){
     // Here, li elements inside this widget should be used as navigation if data-href has been applied:
     requestAnimationFrame(() => {
       // Filter only li elements from children
@@ -574,6 +581,42 @@ class BreadCrumb extends HTMLElement {
         }
       });
     })
+  }
+
+  smartRender(){
+    const items = this.paths.map(path => {
+      const name = path.charAt(0).toUpperCase() + path.slice(1);
+      return `<li>${name}</li>`;
+    }).join('');
+
+    console.log(items)
+
+    this.innerHTML = items;
+  }
+
+  get slotElement(){
+    return this.shadowRoot.querySelector("slot");
+  }
+
+  get paths(){
+
+    const extentions = ["html", "php", "htm"];
+
+    var paths = window.location.pathname
+    var pathArray = paths.split('/').filter(path => path != '');
+
+    return pathArray.map(path => {
+      var noExtensions = path.split('.').filter(p => !extentions.includes(p)).join('');
+      var noDashLine = noExtensions.replace('-', " ");
+
+      return noDashLine;
+    });
+  }
+}
+
+window.breadCrumbLoaded = function(breadCrumb){
+  if(breadCrumb.hasAttribute('data-auto')){
+    breadCrumb.smartRender();
   }
 }
 
