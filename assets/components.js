@@ -445,7 +445,6 @@ class Popover extends HTMLElement {
 class Modal extends HTMLDialogElement {
   constructor() {
     super();
-
     this._onTransitionEnd = this._onTransitionEnd.bind(this);
   }
 
@@ -453,12 +452,22 @@ class Modal extends HTMLDialogElement {
     this.showModal();
 
     requestAnimationFrame(() => (this.content.dataset["open"] = ""));
+
+    const event = new CustomEvent('modalOpened');
+    event.modal = this;
+
+    document.dispatchEvent(event);
   }
 
   closeModal() {
     delete this.content.dataset["open"];
 
     this.content.addEventListener("transitionend", this._onTransitionEnd);
+
+    const event = new CustomEvent('modalClosed');
+    event.modal = this;
+
+    document.dispatchEvent(event);
   }
 
   _onTransitionEnd(evt) {
