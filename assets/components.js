@@ -204,6 +204,39 @@ function $id(id) {
   });
 }
 
+/**
+ * An Extended String Class That Provides Capitalization, Word Finder etc.
+ */
+class Sentence extends String {
+  constructor(string) {
+    super(string);
+  }
+
+  capitalizeFirst() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
+
+  capitalizeEach(){
+    var capitalize = this.words.map(word => {
+      return (new Sentence(word)).capitalizeFirst();
+    }).join(" ");
+
+    return new Sentence(capitalize);
+  }
+
+  get words(){
+    return this.split(" ");
+  }
+
+  has(word){
+    return this.split(" ").includes(word);
+  }
+
+  punctuate(punctuation = "."){
+    return new Sentence(this + punctuation);
+  }
+}
+
 class Carousel extends HTMLElement {
   constructor() {
     super();
@@ -555,7 +588,10 @@ class BreadCrumb extends HTMLElement {
 
   connectedCallback(){
     this.renderFunctionalities();
-    if(typeof window.breadCrumbLoaded == 'function') window.breadCrumbLoaded(this);
+    // if(typeof window.breadCrumbLoaded == 'function') window.breadCrumbLoaded(this);
+    const event = new CustomEvent('breadcrumbLoaded');
+    event.breadcrumb = this;
+    document.dispatchEvent(event);
   }
 
   renderFunctionalities(){
@@ -608,17 +644,24 @@ class BreadCrumb extends HTMLElement {
     return pathArray.map(path => {
       var noExtensions = path.split('.').filter(p => !extentions.includes(p)).join('');
       var noDashLine = noExtensions.replace('-', " ");
+      var capitalize = new Sentence(noDashLine).capitalizeEach(); 
 
-      return noDashLine;
+      return capitalize;
     });
   }
 }
 
-window.breadCrumbLoaded = function(breadCrumb){
-  if(breadCrumb.hasAttribute('data-auto')){
-    breadCrumb.smartRender();
+// window.breadCrumbLoaded = function(breadCrumb){
+//   if(breadCrumb.hasAttribute('data-auto')){
+//     breadCrumb.smartRender();
+//   }
+// }
+
+document.addEventListener('breadcrumbLoaded', e => {
+  if(e.breadcrumb.hasAttribute('data-auto')){
+    e.breadcrumb.smartRender();
   }
-}
+})
 
 window.StatefulElement = StatefulElement;
 
