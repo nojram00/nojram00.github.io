@@ -550,16 +550,6 @@ class BreadCrumb extends HTMLElement {
       </ul>
     `
   }
-
-  connectedCallback(){
-
-    requestAnimationFrame(() => {
-      const childrenArray = Array.from(this.children)
-      childrenArray.forEach((child) => {
-        
-      })
-    })
-  }
 }
 
 window.StatefulElement = StatefulElement;
@@ -571,6 +561,4 @@ customElements.define("html-popover", Popover);
 customElements.define("html-modal", Modal, { extends: "dialog" });
 customElements.define("html-copyright", Copyright);
 customElements.define("html-scr", ScriptLetter);
-customElements.define("html-breadcrumb", BreadCrumb);
-
 customElements.define("html-breadcrumb", BreadCrumb);
