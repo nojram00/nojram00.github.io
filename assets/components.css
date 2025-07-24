@@ -78,16 +78,16 @@ dialog[is="html-modal"] > [data-content][data-open] {
 html-breadcrumb > li {
   cursor: pointer;
   position: relative;
+}
 
-  &:hover{
-    text-decoration: underline;
-    color: rgba(200, 200, 200, .90);
-  }
+html-breadcrumb > li:hover {
+  text-decoration: underline;
+  color: rgba(200, 200, 200, .90);
+}
 
-  &:not(:last-child)::after{
-      content: url('https://nojram00.github.io/svg/right.svg');
-      margin-left: 10px;
-  }   
+html-breadcrumb > li:not(:last-child)::after {
+  content: url('https://nojram00.github.io/svg/right.svg');
+  margin-left: 10px;
 }
 
 html-breadcrumb > li > a {
